@@ -1,5 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction, createAsyncThunk} from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import axios from 'axios';
+export const getTodos = createAsyncThunk('todos/fetchedData', async () => {
+    const response = await axios.get("https://jsonplaceholder.typicode.com/todos");
+    return response.data;
+})
 export interface Todo{
     id: string,
     title: string,
@@ -34,6 +39,23 @@ const todoSlice = createSlice({
             const id = action.payload;
             state.todos = state.todos.filter(todo => todo.id !== id)
         }
+    },
+    extraReducers:(builder)=>{
+        builder
+            .addCase(getTodos.pending, () => {
+                    console.log("Pending....")
+                }
+            )
+            .addCase(getTodos.fulfilled, (state, action) => {
+                
+                state.todos = action.payload
+                console.log("Successfully...")
+                }
+            )
+            .addCase(getTodos.rejected, () => {
+                    console.log("Failed...")
+                }
+            )
     }
 })
 

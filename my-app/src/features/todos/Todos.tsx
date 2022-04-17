@@ -4,6 +4,7 @@ import { selectTodo } from './todoSlice';
 import Navbar from './Navbar';
 import TodoForm from './TodoForm';
 import { markComplete, deleteTodo } from './todoSlice';
+import {getTodos} from './todoSlice'
 function Todos() {
     //Cách 1
     // const {todos, activeId} = useAppSelector(selectTodo);
@@ -18,6 +19,9 @@ function Todos() {
     const removeTodo = (id: string) => {
         dispatch(deleteTodo(id))
     }
+    React.useEffect(() => {
+        dispatch(getTodos());
+    }, [dispatch]);
     return (
         <div>
             <Navbar />
